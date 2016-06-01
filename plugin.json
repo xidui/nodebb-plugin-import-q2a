@@ -1,0 +1,12 @@
+{
+  "id": "nodebb-plugin-import-q2a",
+  "name": "nodebb-plugin-import-q2a",
+  "description": "Exporter for Q2A forum compatible with nodebb-plugin-import",
+  "url": "https://github.com/xidui/nodebb-plugin-import-q2a",
+  "library": "./admin/index.js",
+  "hooks": [
+    { "hook": "filter:admin.header.build", "method": "admin.menu"},
+    { "hook": "static:app.load", "method": "admin.load"}
+  ],
+  "templates": "./public/templates"
+}
