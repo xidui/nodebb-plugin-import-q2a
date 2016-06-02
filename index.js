@@ -37,16 +37,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		callback();
 	};
 
-	Exporter.getGroups = function(callback) {
-		Exporter.log('getGroups');
-		return Exporter.getPaginatedGroups(0, -1, callback);
-	};
-
-	Exporter.getPaginatedGroups = function(start, limit, callback) {
-		callback = !_.isFunction(callback) ? noop : callback;
-		callback();
-	};
-
 	Exporter.getCategories = function(callback) {
 		Exporter.log('getCategories');
 		return Exporter.getPaginatedCategories(0, -1, callback);
@@ -333,9 +323,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			},
 			function(next) {
 				Exporter.getUsers(next);
-			},
-			function(next) {
-				Exporter.getGroups(next);
 			},
 			function(next) {
 				Exporter.getCategories(next);
