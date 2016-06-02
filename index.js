@@ -34,7 +34,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 	};
 	Exporter.getPaginatedUsers = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback()
+		callback();
 	};
 
 	Exporter.getGroups = function(callback) {
@@ -44,7 +44,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 
 	Exporter.getPaginatedGroups = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback()
+		callback();
 	};
 
 	Exporter.getCategories = function(callback) {
