@@ -89,7 +89,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					map[row._cid] = row;
 				});
 
-				console.log(map[Object.keys(map)[0]]);
 				callback(null, map);
 			});
 	};
@@ -143,7 +142,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					map[row._tid] = row;
 				});
 
-				console.log(map[Object.keys(map)[0]]);
 				callback(null, map);
 			});
 	};
@@ -264,19 +262,60 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			if (err) {
 				return callback(err);
 			}
-			console.log(result['answer'][Object.keys(result['answer'])[0]]);
-			console.log(result['comment'][Object.keys(result['comment'])[0]]);
 			callback(null, _.extend(result['answer'], result['comment']));
 		});
 	};
 
-	Exporter.getMessages = function(callback) {
-		Exporter.log('getMessages');
-		return Exporter.getPaginatedMessages(0, -1, callback);
+	Exporter.getVotes = function(callback) {
+		Exporter.log('getVotes');
+		return Exporter.getPaginatedVotes(0, -1, callback);
 	};
-	Exporter.getPaginatedMessages = function(start, limit, callback) {
+	Exporter.getPaginatedVotes = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		callback()
+
+		var err;
+		var prefix = Exporter.config('prefix');
+		var startms = +new Date();
+		var query = 'SELECT '
+			// since qa_uservotes has no voteid at all, so we need to generate it ourselves
+			// + 'v.voteid as _vid'
+			+ 'v.userid as _uid, '
+			+ 'v.postid as _pid, '
+			+ 'v.vote as _action, '
+			+ 'p.type as _post_type '
+			+ 'FROM ' + prefix + 'uservotes as v '
+			+ 'LEFT JOIN ' + prefix + 'posts as p '
+			+ 'ON v.postid=p.postid '
+			+ 'WHERE v.vote!=0 '
+			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
+
+		if (!Exporter.connection) {
+			err = {error: 'MySQL connection is not setup. Run setup(config) first'};
+			Exporter.error(err.error);
+			return callback(err);
+		}
+
+		Exporter.connection.query(query,
+			function(err, rows) {
+				if (err) {
+					Exporter.error(err);
+					return callback(err);
+				}
+
+				//normalize here
+				var map = {};
+				var vid = 1;
+				rows.forEach(function(row) {
+					if (row._post_type == 'Q' || row._parent_type == 'Q_HIDDEN') {
+						row._tid = row._pid;
+						row._pid = null;
+						row._vid = vid++;
+					}
+					map[row._vid] = row;
+				});
+
+				callback(null, map);
+			});
 	};
 
 	Exporter.teardown = function(callback) {
@@ -308,7 +347,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				Exporter.getPosts(next);
 			},
 			function(next) {
-				Exporter.getMessages(next);
+				Exporter.getVotes(next);
 			},
 			function(next) {
 				Exporter.teardown(next);
