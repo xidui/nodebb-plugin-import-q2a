@@ -34,7 +34,44 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 	};
 	Exporter.getPaginatedUsers = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		callback(null, {});
+
+		var err;
+		var prefix = Exporter.config('prefix');
+		var startms = +new Date();
+		var query = 'SELECT '
+			+'auth_user.id as _uid, '
+			+'auth_user.email as _email, '
+			+'auth_user.username as _username, '
+			+'auth_user.date_joined as _joindate, '
+			+'auth_user.last_login as _lastonline '
+			+ 'FROM auth_user '
+			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
+
+		if (!Exporter.connection) {
+			err = {error: 'MySQL connection is not setup. Run setup(config) first'};
+			Exporter.error(err.error);
+			return callback(err);
+		}
+
+		Exporter.connection.query(query,
+			function(err, rows) {
+				if (err) {
+					Exporter.error(err);
+					return callback(err);
+				}
+
+				//normalize here
+				var map = {};
+				rows.forEach(function(row) {
+					row._description = row._description || 'No decsciption available';
+					row._joindate = +new Date(row._joindate) || startms;
+					row._lastonline = +new Date(row._lastonline) || startms;
+
+					map[row._uid] = row;
+				});
+
+				callback(null, map);
+			});
 	};
 
 	Exporter.getGroups = function(callback) {
