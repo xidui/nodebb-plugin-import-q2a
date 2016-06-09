@@ -152,8 +152,11 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.views as _viewcount, '
 			+ prefix + 'posts.tags as _tags, '                      // need do some conversion
 			+ prefix + 'posts.type=\'Q_HIDDEN\' as _deleted, '
-			+ prefix + 'posts.updated as _edited '                  // need do some conversion
+			+ prefix + 'posts.updated as _edited, '                 // need do some conversion
+			+ 'u.email as _uemail '
 			+ 'FROM ' + prefix + 'posts '
+			+ 'LEFT JOIN auth_user as u '
+			+ 'ON u.id=' + prefix + 'posts.userid '
 			+ 'WHERE type=\'Q\' or type=\'Q_HIDDEN\''
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
@@ -201,8 +204,11 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.userid as _uid, '
 			+ prefix + 'posts.created as _timestamp, '
 			+ prefix + 'posts.createip as _ip, '
-			+ prefix + 'posts.updated as _edited '
+			+ prefix + 'posts.updated as _edited, '
+			+ 'u.email as _uemail '
 			+ 'FROM ' + prefix + 'posts '
+			+ 'LEFT JOIN auth_user as u '
+			+ 'ON u.id=' + prefix + 'posts.userid '
 			+ 'WHERE type=\'A\' or type=\'A_HIDDEN\''
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
@@ -322,10 +328,13 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ 'v.userid as _uid, '
 			+ 'v.postid as _pid, '
 			+ 'v.vote as _action, '
-			+ 'p.type as _post_type '
+			+ 'p.type as _post_type, '
+			+ 'u.email as _uemail'
 			+ 'FROM ' + prefix + 'uservotes as v '
 			+ 'LEFT JOIN ' + prefix + 'posts as p '
 			+ 'ON v.postid=p.postid '
+			+ 'LEFT JOIN auth_user as u '
+			+ 'ON u.id=v.userid '
 			+ 'WHERE v.vote!=0 '
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
