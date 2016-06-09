@@ -331,10 +331,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ 'p.type as _post_type, '
 			+ 'u.email as _uemail'
 			+ 'FROM ' + prefix + 'uservotes as v '
-			+ 'LEFT JOIN ' + prefix + 'posts as p '
-			+ 'ON v.postid=p.postid '
-			+ 'LEFT JOIN auth_user as u '
-			+ 'ON u.id=v.userid '
+			+ 'LEFT JOIN ' + prefix + 'posts as p, auth_user as u '
+			+ 'ON v.postid=p.postid and u.id=v.userid'
 			+ 'WHERE v.vote!=0 '
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
