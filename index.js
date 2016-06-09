@@ -67,7 +67,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._joindate = +new Date(row._joindate) || startms;
 					row._lastonline = +new Date(row._lastonline) || startms;
 
-					map[row._uid] = row;
+					if (row._uid < 25000)
+						map[row._uid] = row;
 				});
 
 				callback(null, map);
@@ -176,7 +177,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._edited = +new Date(row._edited) || startms;
 					row._tags = row._tags.split(',');
 
-					map[row._tid] = row;
+					if (row._uid < 25000)
+						map[row._tid] = row;
 				});
 
 				callback(null, map);
@@ -223,7 +225,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._timestamp = +new Date(row._timestamp) || startms;
 					row._edited = +new Date(row._edited) || startms;
 
-					map[row._pid] = row;
+					if (row._uid < 25000)
+						map[row._pid] = row;
 				});
 
 				callback(null, map);
@@ -237,13 +240,13 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		var query = 'SELECT '
 			+ 'p1.postid as _pid, '
 
-			// old topicid depend on its parent, whether its parent is a Question or Answer
+				// old topicid depend on its parent, whether its parent is a Question or Answer
 			+ 'p1.parentid as _tid, '
 
 			+ 'p1.content as _content, '
 			+ 'p1.userid as _uid, '
-			// _toPid also depends on whether its parent is a Question or Answer
-			// + 'p1.userid as _toPid, '
+				// _toPid also depends on whether its parent is a Question or Answer
+				// + 'p1.userid as _toPid, '
 			+ 'p1.created as _timestamp, '
 			+ 'p1.createip as _ip, '
 			+ 'p1.updated as _edited, '
@@ -278,8 +281,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._toPid = row._tid;
 						row._tid = row._parent_parent;
 					}
-
-					map[row._pid] = row;
+					if (row._uid < 25000)
+						map[row._pid] = row;
 				});
 
 				callback(null, map);
@@ -314,8 +317,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		var prefix = Exporter.config('prefix');
 		var startms = +new Date();
 		var query = 'SELECT '
-			// since qa_uservotes has no voteid at all, so we need to generate it ourselves
-			// + 'v.voteid as _vid'
+				// since qa_uservotes has no voteid at all, so we need to generate it ourselves
+				// + 'v.voteid as _vid'
 			+ 'v.userid as _uid, '
 			+ 'v.postid as _pid, '
 			+ 'v.vote as _action, '
@@ -348,7 +351,9 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._pid = null;
 						row._vid = vid++;
 					}
-					map[row._vid] = row;
+
+					if (row._uid < 25000)
+						map[row._vid] = row;
 				});
 
 				callback(null, map);
