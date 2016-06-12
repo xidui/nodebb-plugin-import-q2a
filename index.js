@@ -45,6 +45,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+'auth_user.date_joined as _joindate, '
 			+'auth_user.last_login as _lastonline '
 			+ 'FROM auth_user '
+			+ 'RIGHT JOIN ' + prefix + 'userpoints as up '
+			+ 'ON up.userid=auth_user.id '
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
 		if (!Exporter.connection) {
