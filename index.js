@@ -67,7 +67,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._joindate = +new Date(row._joindate) || startms;
 					row._lastonline = +new Date(row._lastonline) || startms;
 
-					if (row._uid < 25000)
+					//if (row._uid < 25000)
 						map[row._uid] = row;
 				});
 
@@ -180,7 +180,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._edited = +new Date(row._edited) || startms;
 					row._tags = row._tags.split(',');
 
-					if (row._uid < 25000)
+					//if (row._uid < 25000)
 						map[row._tid] = row;
 				});
 
@@ -231,7 +231,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._timestamp = +new Date(row._timestamp) || startms;
 					row._edited = +new Date(row._edited) || startms;
 
-					if (row._uid < 25000)
+					//if (row._uid < 25000)
 						map[row._pid] = row;
 				});
 
@@ -287,7 +287,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._toPid = row._tid;
 						row._tid = row._parent_parent;
 					}
-					if (row._uid < 25000)
+					//if (row._uid < 25000)
 						map[row._pid] = row;
 				});
 
@@ -359,7 +359,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._vid = vid++;
 					}
 
-					if (row._uid < 25000)
+					//if (row._uid < 25000)
 						map[row._vid] = row;
 				});
 
