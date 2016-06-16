@@ -69,8 +69,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._joindate = +new Date(row._joindate) || startms;
 					row._lastonline = +new Date(row._lastonline) || startms;
 
-					if (row._uid < 25000)
-						map[row._uid] = row;
+					map[row._uid] = row;
 				});
 
 				callback(null, map);
@@ -130,9 +129,10 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				});
 
 				var map2 = {};
-				map2['6'] = map['6'];
-				map2['5'] = map['5'];
-				callback(null, map);
+				map2['1'] = map['1'];
+				map2['2'] = map['2'];
+				console.log(map2);
+				callback(null, map2);
 			});
 	};
 
@@ -186,7 +186,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._edited = +new Date(row._edited) || startms;
 					row._tags = row._tags.split(',');
 
-					if (row._cid == '6'){
+					if (row._cid == '2' || row._cid == '1'){
 						map[row._tid] = row;
 						t[row._tid] = true;
 					}
