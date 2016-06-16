@@ -34,7 +34,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 	};
 	Exporter.getPaginatedUsers = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback(null, {});
 
 		var err;
 		var prefix = Exporter.config('prefix');
@@ -94,7 +93,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 	};
 	Exporter.getPaginatedCategories = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback(null, {});
 
 		var err;
 		var prefix = Exporter.config('prefix');
@@ -141,7 +139,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 	};
 	Exporter.getPaginatedTopics = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback(null, {});
 
 		var err;
 		var prefix = Exporter.config('prefix');
@@ -302,7 +299,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 
 	Exporter.getPaginatedPosts = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
-		return callback(null, {});
 
 		async.series({
 			answer: function (next) {
@@ -369,7 +365,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						map[row._vid] = row;
 					}
 				});
-				map = {};
+
 				rows.forEach(function(row) {
 					if (row._post_type != 'Q' && row._parent_type != 'Q_HIDDEN') {
 						row._vid = vid++;
