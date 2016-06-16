@@ -69,7 +69,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._joindate = +new Date(row._joindate) || startms;
 					row._lastonline = +new Date(row._lastonline) || startms;
 
-					//if (row._uid < 25000)
+					if (row._uid < 25000)
 						map[row._uid] = row;
 				});
 
@@ -129,6 +129,9 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					map[row._cid] = row;
 				});
 
+				var map2 = {};
+				map2['6'] = map['6'];
+				map2['5'] = map['5'];
 				callback(null, map);
 			});
 	};
@@ -137,6 +140,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		Exporter.log('getTopics');
 		return Exporter.getPaginatedTopics(0, -1, callback);
 	};
+	var t = {};
 	Exporter.getPaginatedTopics = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
 
@@ -182,8 +186,10 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._edited = +new Date(row._edited) || startms;
 					row._tags = row._tags.split(',');
 
-					//if (row._uid < 25000)
+					if (row._cid == '6'){
 						map[row._tid] = row;
+						t[row._tid] = true;
+					}
 				});
 
 				callback(null, map);
@@ -233,7 +239,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._timestamp = +new Date(row._timestamp) || startms;
 					row._edited = +new Date(row._edited) || startms;
 
-					//if (row._uid < 25000)
+					if (row._tid in t)
 						map[row._pid] = row;
 				});
 
@@ -289,7 +295,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._toPid = row._tid;
 						row._tid = row._parent_parent;
 					}
-					//if (row._uid < 25000)
+					if (row._tid in t)
 						map[row._pid] = row;
 				});
 
@@ -359,6 +365,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var vid = 1;
 				rows.forEach(function(row) {
 					if (row._post_type == 'Q' || row._parent_type == 'Q_HIDDEN') {
+						if (!(row._pid in t)) return;
+
 						row._tid = row._pid;
 						row._pid = null;
 						row._vid = vid++;
@@ -368,6 +376,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 
 				rows.forEach(function(row) {
 					if (row._post_type != 'Q' && row._parent_type != 'Q_HIDDEN') {
+						if (!(row._pid in t)) return;
+
 						row._vid = vid++;
 						map[row._vid] = row;
 					}
