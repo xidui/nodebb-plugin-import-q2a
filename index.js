@@ -99,6 +99,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		var query = 'SELECT '
 			+ prefix + 'categories.categoryid as _cid, '
 			+ prefix + 'categories.title as _name, '
+			+ prefix + 'categories.tags as _slug, '
 			+ prefix + 'categories.content as _description, '
 			+ prefix + 'categories.position as _order, '
 			+ prefix + 'categories.backpath as _path, '
@@ -124,6 +125,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				rows.forEach(function(row) {
 					row._description = row._description || 'No decsciption available';
 					row._timestamp = +new Date(row._timestamp) || startms;
+					row._path = row._path.split('/').reverse().join('/');
 
 					if (row._cid === 1 || row._cid === 2) {
 						map[row._cid] = row;
