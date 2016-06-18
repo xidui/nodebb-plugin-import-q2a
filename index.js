@@ -127,11 +127,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._timestamp = +new Date(row._timestamp) || startms;
 					row._path = row._path.split('/').reverse().join('/');
 
-					if (row._cid === 1 || row._cid === 2) {
-						map[row._cid] = row;
-					}
+					map[row._cid] = row;
 				});
-				console.log(map);
 				callback(null, map);
 			});
 	};
@@ -140,7 +137,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 		Exporter.log('getTopics');
 		return Exporter.getPaginatedTopics(0, -1, callback);
 	};
-	var t = {};
+
 	Exporter.getPaginatedTopics = function(start, limit, callback) {
 		callback = !_.isFunction(callback) ? noop : callback;
 
@@ -186,10 +183,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._edited = +new Date(row._edited) || startms;
 					row._tags = row._tags.split(',');
 
-					if (row._cid === 2 || row._cid === 1){
-						map[row._tid] = row;
-						t[row._tid] = true;
-					}
+					map[row._tid] = row;
 				});
 
 				callback(null, map);
@@ -239,8 +233,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					row._timestamp = +new Date(row._timestamp) || startms;
 					row._edited = +new Date(row._edited) || startms;
 
-					if (row._tid in t)
-						map[row._pid] = row;
+					map[row._pid] = row;
 				});
 
 				callback(null, map);
@@ -295,8 +288,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 						row._toPid = row._tid;
 						row._tid = row._parent_parent;
 					}
-					if (row._tid in t)
-						map[row._pid] = row;
+
+					map[row._pid] = row;
 				});
 
 				callback(null, map);
@@ -365,8 +358,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var vid = 1;
 				rows.forEach(function(row) {
 					if (row._post_type == 'Q' || row._parent_type == 'Q_HIDDEN') {
-						if (!(row._pid in t)) return;
-
 						row._tid = row._pid;
 						row._pid = null;
 						row._vid = vid++;
@@ -376,8 +367,6 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 
 				rows.forEach(function(row) {
 					if (row._post_type != 'Q' && row._parent_type != 'Q_HIDDEN') {
-						if (!(row._pid in t)) return;
-
 						row._vid = vid++;
 						map[row._vid] = row;
 					}
