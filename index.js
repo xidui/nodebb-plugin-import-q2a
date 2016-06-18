@@ -372,6 +372,9 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 					}
 				});
 
+				console.log(map['136568']);
+				delete map['136568'];
+
 				callback(null, map);
 			});
 	};
