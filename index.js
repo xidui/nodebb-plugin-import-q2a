@@ -153,7 +153,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.postid as _tid, '
 			+ prefix + 'posts.userid as _uid, '
 			+ prefix + 'posts.categoryid as _cid, '
-			+ prefix + 'inet_ntoa(posts.createip) as _ip, '
+			+ 'inet_ntoa(' + prefix + 'posts.createip) as _ip, '
 			+ prefix + 'posts.title as _title, '
 			+ prefix + 'posts.content as _content, '
 			+ prefix + 'posts.created as _timestamp, '              // need do some conversion
@@ -210,7 +210,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.content as _content, '
 			+ prefix + 'posts.userid as _uid, '
 			+ prefix + 'posts.created as _timestamp, '
-			+ prefix + 'inet_ntoa(posts.createip) as _ip, '
+			+ 'inet_ntoa(' + prefix + 'posts.createip) as _ip, '
 			+ prefix + 'posts.updated as _edited, '
 			+ 'u.email as _uemail '
 			+ 'FROM ' + prefix + 'posts '
