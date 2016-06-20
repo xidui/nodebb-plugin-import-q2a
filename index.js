@@ -6,6 +6,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 
 (function(Exporter) {
 
+	var time_fix = 15 * 3600 * 1000;
+
 	Exporter.setup = function(config, callback) {
 		Exporter.log('setup');
 
@@ -67,8 +69,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var map = {};
 				rows.forEach(function(row) {
 					row._description = row._description || 'No decsciption available';
-					row._joindate = +new Date(row._joindate) || startms;
-					row._lastonline = +new Date(row._lastonline) || startms;
+					row._joindate = +new Date(row._joindate) + time_fix || startms;
+					row._lastonline = +new Date(row._lastonline) + time_fix || startms;
 
 					map[row._uid] = row;
 				});
@@ -126,7 +128,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var map = {};
 				rows.forEach(function(row) {
 					row._description = row._description || 'No decsciption available';
-					row._timestamp = +new Date(row._timestamp) || startms;
+					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
 					row._path = row._path.split('/').reverse().join('/');
 
 					map[row._cid] = row;
@@ -151,7 +153,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.postid as _tid, '
 			+ prefix + 'posts.userid as _uid, '
 			+ prefix + 'posts.categoryid as _cid, '
-			+ prefix + 'posts.createip as _ip, '                    // need do some conversion
+			+ prefix + 'inet_ntoa(posts.createip) as _ip, '
 			+ prefix + 'posts.title as _title, '
 			+ prefix + 'posts.content as _content, '
 			+ prefix + 'posts.created as _timestamp, '              // need do some conversion
@@ -182,8 +184,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				//normalize here
 				var map = {};
 				rows.forEach(function(row) {
-					row._timestamp = +new Date(row._timestamp) || startms;
-					row._edited = +new Date(row._edited) || startms;
+					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
+					row._edited = +new Date(row._edited) + time_fix || startms;
 					row._tags = row._tags.split(',');
 
 					map[row._tid] = row;
@@ -208,7 +210,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ prefix + 'posts.content as _content, '
 			+ prefix + 'posts.userid as _uid, '
 			+ prefix + 'posts.created as _timestamp, '
-			+ prefix + 'posts.createip as _ip, '
+			+ prefix + 'inet_ntoa(posts.createip) as _ip, '
 			+ prefix + 'posts.updated as _edited, '
 			+ 'u.email as _uemail '
 			+ 'FROM ' + prefix + 'posts '
@@ -233,8 +235,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				//normalize here
 				var map = {};
 				rows.forEach(function(row) {
-					row._timestamp = +new Date(row._timestamp) || startms;
-					row._edited = +new Date(row._edited) || startms;
+					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
+					row._edited = +new Date(row._edited) + time_fix || startms;
 
 					map[row._pid] = row;
 				});
@@ -258,7 +260,7 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				// _toPid also depends on whether its parent is a Question or Answer
 				// + 'p1.userid as _toPid, '
 			+ 'p1.created as _timestamp, '
-			+ 'p1.createip as _ip, '
+			+ 'inet_ntoa(p1.createip) as _ip, '
 			+ 'p1.updated as _edited, '
 			+ 'p2.type as _parent_type, '
 			+ 'p2.parentid as _parent_parent '
@@ -284,8 +286,8 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				//normalize here
 				var map = {};
 				rows.forEach(function(row) {
-					row._timestamp = +new Date(row._timestamp) || startms;
-					row._edited = +new Date(row._edited) || startms;
+					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
+					row._edited = +new Date(row._edited) + time_fix || startms;
 
 					if (row._parent_type == 'A' || row._parent_type == 'A_HIDDEN') {
 						row._toPid = row._tid;
