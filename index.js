@@ -185,9 +185,11 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var map = {};
 				rows.forEach(function(row) {
 					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
-					row._edited = +new Date(row._edited) + time_fix || startms;
-					row._tags = row._tags.split(',');
+					if (row._edited){
+						row._edited = +new Date(row._edited) + time_fix || startms;
+					}
 
+					row._tags = row._tags.split(',');
 					map[row._tid] = row;
 				});
 
@@ -236,7 +238,9 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var map = {};
 				rows.forEach(function(row) {
 					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
-					row._edited = +new Date(row._edited) + time_fix || startms;
+					if (row._edited){
+						row._edited = +new Date(row._edited) + time_fix || startms;
+					}
 
 					map[row._pid] = row;
 				});
@@ -290,7 +294,9 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 				var map = {};
 				rows.forEach(function(row) {
 					row._timestamp = +new Date(row._timestamp) + time_fix || startms;
-					row._edited = +new Date(row._edited) + time_fix || startms;
+					if (row._edited){
+						row._edited = +new Date(row._edited) + time_fix || startms;
+					}
 
 					if (row._parent_type == 'A' || row._parent_type == 'A_HIDDEN') {
 						row._toPid = row._tid;
