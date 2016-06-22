@@ -263,10 +263,13 @@ var logPrefix = '[nodebb-plugin-import-q2a]';
 			+ 'inet_ntoa(p1.createip) as _ip, '
 			+ 'p1.updated as _edited, '
 			+ 'p2.type as _parent_type, '
-			+ 'p2.parentid as _parent_parent '
+			+ 'p2.parentid as _parent_parent, '
+			+ 'u.email as _uemail '
 			+ 'FROM ' + prefix + 'posts as p1 '
 			+ 'LEFT JOIN ' + prefix + 'posts as p2 '
 			+ 'ON p1.parentid=p2.postid '
+			+ 'LEFT JOIN auth_user as u '
+			+ 'ON u.id=p1.userid '
 			+ 'WHERE p1.type in (\'C\', \'C_HIDDEN\')'
 			+  (start >= 0 && limit >= 0 ? 'LIMIT ' + start + ',' + limit : '');
 
